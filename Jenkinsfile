@@ -17,7 +17,7 @@ pipeline {
       steps {
         
         sh '''pwd
-              rsync -zhvr . ubuntu@3.84.86.136:/home/ubuntu/nodejs/
+              rsync -zhvr . ubuntu@$MASTER_DEPLOY_IP:/home/ubuntu/nodejs/
               '''
       }
     }
@@ -25,14 +25,14 @@ pipeline {
     stage('Install Packages on Main Server') {
       when { branch 'master'}
       steps {
-        sh 'ssh ubuntu@3.84.86.136 \'cd /home/ubuntu/main && npm i\''
+        sh 'ssh ubuntu@$MASTER_DEPLOY_IP \'cd /home/ubuntu/main && npm i\''
       }
     }
 
     stage('Production Live Application') {
       when { branch 'master'}
       steps {
-        sh 'ssh ubuntu@3.84.86.136 \"cd /home/ubuntu/main/ && pm2 restart index.js\"'
+        sh 'ssh ubuntu@$MASTER_DEPLOY_IP \"cd /home/ubuntu/main/ && pm2 restart index.js\"'
       }
     }
 
@@ -42,30 +42,25 @@ pipeline {
       stage('Sync file to Stage Server') {
         when { branch 'stage'}
         steps {
-        sh '''pwd
-              rsync -zhvr . ubuntu@44.202.54.38:/home/ubuntu/nodejs/
-              '''
+          sh '''pwd
+                rsync -zhvr . ubuntu@$STAGE_DEPLOY_IP:/home/ubuntu/nodejs/
+                '''
+        }
       }
-    }
 
     stage('Install Packages on Stage Server') {
       when { branch 'stage'}
       steps {
-        sh 'ssh ubuntu@44.202.54.38 \"cd /home/ubuntu/stage && npm i\"'
+        sh 'ssh ubuntu@$STAGE_DEPLOY_IP \"cd /home/ubuntu/stage && npm i\"'
       }
     }
 
     stage('Staging Live Application') {
       when { branch 'stage'}
       steps {
-        sh 'ssh ubuntu@44.202.54.38 \"cd /home/ubuntu/stage/ && pm2 restart index.js\"'
+        sh 'ssh ubuntu@$STAGE_DEPLOY_IP \"cd /home/ubuntu/stage/ && pm2 restart index.js\"'
       }
     }
 
-    
-    
-    
-    
-  
   }
 }
