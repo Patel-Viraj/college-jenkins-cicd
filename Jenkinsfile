@@ -25,7 +25,7 @@ pipeline {
     stage('Install Packages on Main Server') {
       when { branch 'master'}
       steps {
-        sh 'ssh ubuntu@$MASTER_DEPLOY_IP \'cd /home/ubuntu/nodejs && npm i\''
+        sh 'ssh -t ubuntu@$MASTER_DEPLOY_IP \'cd /home/ubuntu/nodejs && npm i \''
       }
     }
 
@@ -51,7 +51,7 @@ pipeline {
     stage('Install Packages on Stage Server') {
       when { branch 'stage'}
       steps {
-        sh 'ssh ubuntu@$STAGE_DEPLOY_IP \"cd /home/ubuntu/nodejs && npm i\"'
+        sh 'ssh ubuntu@$STAGE_DEPLOY_IP \"cd /home/ubuntu/nodejs && npm i \"'
       }
     }
 
