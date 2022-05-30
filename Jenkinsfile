@@ -25,14 +25,14 @@ pipeline {
     stage('Install Packages on Main Server') {
       when { branch 'master'}
       steps {
-        sh 'ssh ubuntu@$MASTER_DEPLOY_IP \'cd /home/ubuntu/main && npm i\''
+        sh 'ssh ubuntu@$MASTER_DEPLOY_IP \'cd /home/ubuntu/nodejs && npm i\''
       }
     }
 
     stage('Production Live Application') {
       when { branch 'master'}
       steps {
-        sh 'ssh ubuntu@$MASTER_DEPLOY_IP \"cd /home/ubuntu/main/ && pm2 restart index.js\"'
+        sh 'ssh ubuntu@$MASTER_DEPLOY_IP \"cd /home/ubuntu/nodejs && pm2 restart index.js\"'
       }
     }
 
@@ -51,14 +51,14 @@ pipeline {
     stage('Install Packages on Stage Server') {
       when { branch 'stage'}
       steps {
-        sh 'ssh ubuntu@$STAGE_DEPLOY_IP \"cd /home/ubuntu/stage && npm i\"'
+        sh 'ssh ubuntu@$STAGE_DEPLOY_IP \"cd /home/ubuntu/nodejs && npm i\"'
       }
     }
 
     stage('Staging Live Application') {
       when { branch 'stage'}
       steps {
-        sh 'ssh ubuntu@$STAGE_DEPLOY_IP \"cd /home/ubuntu/stage/ && pm2 restart index.js\"'
+        sh 'ssh ubuntu@$STAGE_DEPLOY_IP \"cd /home/ubuntu/nodejs && pm2 restart index.js\"'
       }
     }
 
