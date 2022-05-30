@@ -13,24 +13,24 @@ pipeline {
     
 
     stage('Sync file to Main Server') {
-      when { branch 'main'}
+      when { branch 'master'}
       steps {
         
         sh '''pwd
-              rsync -zhvr . ubuntu@3.84.86.136:/home/ubuntu/main/
+              rsync -zhvr . ubuntu@3.84.86.136:/home/ubuntu/nodejs/
               '''
       }
     }
 
     stage('Install Packages on Main Server') {
-      when { branch 'main'}
+      when { branch 'master'}
       steps {
         sh 'ssh ubuntu@3.84.86.136 \'cd /home/ubuntu/main && npm i\''
       }
     }
 
     stage('Production Live Application') {
-      when { branch 'main'}
+      when { branch 'master'}
       steps {
         sh 'ssh ubuntu@3.84.86.136 \"cd /home/ubuntu/main/ && pm2 restart index.js\"'
       }
@@ -43,7 +43,7 @@ pipeline {
         when { branch 'stage'}
         steps {
         sh '''pwd
-              rsync -zhvr . ubuntu@44.202.54.38:/home/ubuntu/stage/
+              rsync -zhvr . ubuntu@44.202.54.38:/home/ubuntu/nodejs/
               '''
       }
     }
